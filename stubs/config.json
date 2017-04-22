@@ -1,0 +1,235 @@
+{
+  "modKey": "Mod4",
+  "floatingKey": "Mod4",
+  "orientation": "auto",
+  "workspaceLayout": "default",
+  "borders": "both",
+  "theme": {
+    "window": {
+      "focused": {
+        "border": "#0088CC",
+        "background": "#0088CC",
+        "text": "#FFFFFF",
+        "indicator": "#DDDDDD"
+      },
+      "unfocused": {
+        "border": "#333333",
+        "background": "#333333",
+        "text": "#888888",
+        "indicator": "#292D2E"
+      },
+      "inactive": {
+        "border": "#333333",
+        "background": "#333333",
+        "text": "#888888",
+        "indicator": "#292D2E"
+      },
+      "urgent": {
+        "border": "#2F343A",
+        "background": "#900000",
+        "text": "#FFFFFF",
+        "indicator": "#900000"
+      }
+    },
+    "bar": {
+      "background": "#333333",
+      "status": "#FFFFFF",
+      "separator": "#08C08C",
+      "focused": {
+        "border": "#4C7899",
+        "background": "#285577",
+        "text": "#FFFFFF"
+      },
+      "active": {
+        "border": "#333333",
+        "background": "#5F676A",
+        "text": "#FFFFFF"
+      },
+      "inactive": {
+        "border": "#333333",
+        "background": "#222222",
+        "text": "#888888"
+      },
+      "urgent": {
+        "border": "#2F343A",
+        "background": "#900000",
+        "text": "#FFFFFF"
+      },
+      "mode": {
+        "border": "#2F343A",
+        "background": "#900000",
+        "text": "#FFFFFF"
+      }
+    }
+  },
+  "workspaces": [
+    "1:  Home",
+    "2:  Browser",
+    "3:  Development",
+    "4:  Term",
+    "5:  Visual",
+    "6:  Relax",
+    "7:  Music",
+    "8:  Game"
+  ],
+  "app": [
+    {
+      "command": "terminator",
+      "class": "Terminator",
+      "hotkey": "$mod+Return",
+      "workspace": 4,
+      "floating": null,
+      "move": null
+    },
+    {
+      "command": "chromium",
+      "class": "Chromium",
+      "hotkey": "$mod+c",
+      "workspace": 2,
+      "floating": null,
+      "move": null
+    },
+    {
+      "command": "firefox",
+      "class": null,
+      "hotkey": "$mod+i",
+      "workspace": 2,
+      "floating": null,
+      "move": null
+    },
+    {
+      "command": "--no-startup-id i3-dmenu-desktop",
+      "class": null,
+      "hotkey": "$mod+d",
+      "workspace": null,
+      "floating": null,
+      "move": null
+    },
+    {
+      "command": null,
+      "class": "An Example",
+      "hotkey": null,
+      "workspace": 8,
+      "floating": null,
+      "move": null
+    }
+  ],
+  "hotkey": [
+    {
+      "key": "$mod+Shift+q",
+      "action": "kill"
+    },
+    {
+      "key": "$mod+Left",
+      "action": "focus left"
+    },
+    {
+      "key": "$mod+Down",
+      "action": "focus down"
+    },
+    {
+      "key": "$mod+Up",
+      "action": "focus up"
+    },
+    {
+      "key": "$mod+Right",
+      "action": "focus right"
+    },
+    {
+      "key": "$mod+Shift+Left",
+      "action": "move left"
+    },
+    {
+      "key": "$mod+Shift+Down",
+      "action": "move down"
+    },
+    {
+      "key": "$mod+Shift+Up",
+      "action":"move up"
+    },
+    {
+      "key": "$mod+Shift+Right",
+      "action": "move right"
+    },
+    {
+      "key": "$mod+h",
+      "action": "split h"
+    },
+    {
+      "key": "$mod+v",
+      "action": "split v"
+    },
+    {
+      "key": "$mod+f",
+      "action": "fullscreen toggle"
+    },
+    {
+      "key": "$mod+s",
+      "action": "layout stacking"
+    },
+    {
+      "key": "$mod+w",
+      "action": "layout tabbed"
+    },
+    {
+      "key": "$mod+e",
+      "action": "layout toggle split"
+    },
+    {
+      "key": "$mod+Shift+Space",
+      "action": "floating toggle"
+    },
+    {
+      "key": "$mod+Space",
+      "action": "focus mode_toggle"
+    },
+    {
+      "key": "$mod+p",
+      "action": "focus parent"
+    },
+    {
+      "key": "$mod+j",
+      "action": "focus child"
+    },
+    {
+      "key": "$mod+Shift+c",
+      "action": "reload"
+    },
+    {
+      "key": "$mod+Shift+R",
+      "action": "restart"
+    },
+    {
+      "key": "$mod+R",
+      "action": "mode \"resize\""
+    }
+  ],
+  "mode": {
+      "resize": [
+        {
+          "key": "Left",
+          "action": "resize shrink width 10 px or 10 ppt"
+        },
+        {
+          "key": "Right",
+          "action": "resize grow width 10 px or 10 ppt"
+        },
+        {
+          "key": "Down",
+          "action": "resize grow height 10 px or 10 ppt"
+        },
+        {
+          "key": "Up",
+          "action": "resize shrink height 10 px or 10 ppt"
+        },
+        {
+          "key": "Escape",
+          "action": "mode \"default\""
+        }
+      ]
+    }
+  ,
+  "startup": [
+    "--no-startup-id aarchup"
+  ]
+}
