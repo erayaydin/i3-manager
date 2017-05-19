@@ -21,8 +21,14 @@ class MainWindow(QtGui.QMainWindow):
         self.ui.setupUi(self)
         self.setWindowIcon(QtGui.QIcon(os.path.join(appPath, 'assets', 'images', 'icon.jpg')))
 
+        self.apps = []
+        self.workspaces = []
+        self.keyboards = []
+        self.modes = {}
+
         self.initConfig()
         self.prepareUi()
+        self.listenButtons()
 
         self.show()
 
@@ -39,6 +45,72 @@ class MainWindow(QtGui.QMainWindow):
     def readConfig(self):
         with open(os.path.join(self.configFolder, 'config.json')) as data:
             self.config = json.load(data)
+        for workspace in self.config['workspaces']:
+            self.workspaces.append(workspace)
+        for app in self.config['app']:
+            self.apps.append({
+                "command": app['command'],
+                "class": app['class'],
+                "hotkey": app['hotkey'],
+                "workspace": app['workspace'],
+                "floating": app['floating'],
+                "move": app['move']
+            })
+        for hotkey in self.config['hotkey']:
+            self.keyboards.append({
+                "key": hotkey['key'],
+                "action": hotkey['action']
+            })
+        for modeKey in self.config['mode']:
+            self.modes[modeKey] = {}
+
+    def listenButtons(self):
+        self.ui.btnInsertWorkspace.clicked.connect(self.insertWorkspace)
+        self.ui.pushButton_5.clicked.connect(self.insertApp)
+        self.ui.btnKeyboardInsert.clicked.connect(self.insertKeyboard)
+
+    def insertWorkspace(self):
+        name = self.ui.workspaceName.text()
+        self.workspaces.append(name)
+        self.refreshWorkspaces()
+        self.refreshAppWorkspace()
+
+    def insertApp(self):
+        command = self.ui.appName.text()
+        appClass = self.ui.appClass.text()
+        hotkey = self.ui.appHotkey.text()
+        if self.ui.appWorkspace.currentIndex() == 0:
+            workspace = None
+        else:
+            workspace = self.ui.appWorkspace.currentIndex()
+        if self.ui.appFloating.currentIndex() == 0:
+            floating = None
+        elif self.ui.appFloating.currentIndex() == 1:
+            floating = "enable"
+        else:
+            floating = "disable"
+        if self.ui.appMove.currentIndex() == 0:
+            move = None
+        else:
+            move = "center"
+        self.apps.append({
+            "command": command,
+            "class": appClass,
+            "hotkey": hotkey,
+            "workspace": workspace,
+            "floating": floating,
+            "move": move
+        })
+        self.refreshApps()
+
+    def insertKeyboard(self):
+        hotkey = self.ui.keyboardHotkey.text()
+        action = self.ui.keyboardAction.text()
+        self.keyboards.append({
+            "key": hotkey,
+            "action": action
+        })
+        self.refreshKeyboards()
 
     def prepareUi(self):
         self.readModifierKey()
@@ -48,10 +120,11 @@ class MainWindow(QtGui.QMainWindow):
         self.readBorders()
         self.readWindowDecoration()
         self.readBar()
-        self.readWorkspaces()
-        self.readApps()
-        self.readKeyboards()
-        self.readModes()
+        self.refreshWorkspaces()
+        self.refreshAppWorkspace()
+        self.refreshApps()
+        self.refreshKeyboards()
+        self.refreshModes()
         self.readStartup()
 
     def readModifierKey(self):
@@ -160,10 +233,11 @@ class MainWindow(QtGui.QMainWindow):
         self.ui.barModeBackground.setText(mode['background'])
         self.ui.barModeText.setText(mode['text'])
 
-    def readWorkspaces(self):
+    def refreshWorkspaces(self):
         table = self.ui.workspacesTable
+        table.setRowCount(0)
         row = 0
-        for workspace in self.config['workspaces']:
+        for workspace in self.workspaces:
             table.insertRow(row)
             table.setItem(row, 0, QtGui.QTableWidgetItem(workspace))
             removeBtn = QtGui.QPushButton(table)
@@ -171,10 +245,18 @@ class MainWindow(QtGui.QMainWindow):
             table.setCellWidget(row, 1, removeBtn)
             row+=1
 
-    def readApps(self):
+    def refreshAppWorkspace(self):
+        workspacesCombo = self.ui.appWorkspace
+        workspacesCombo.clear()
+        workspacesCombo.addItem("None Workspace")
+        for workspace in self.workspaces:
+            workspacesCombo.addItem(workspace)
+
+    def refreshApps(self):
         table = self.ui.appsTable
+        table.setRowCount(0)
         row = 0
-        for app in self.config['app']:
+        for app in self.apps:
             table.insertRow(row)
             table.setItem(row, 0, QtGui.QTableWidgetItem(app['command']))
             table.setItem(row, 1, QtGui.QTableWidgetItem(app['class']))
@@ -210,9 +292,9 @@ class MainWindow(QtGui.QMainWindow):
             moveCombo.addItem("No Force")
             moveCombo.addItem("Move Center")
             if (app['move'] == 'center'):
-                floatingCombo.setCurrentIndex(1)
+                moveCombo.setCurrentIndex(1)
             else:
-                floatingCombo.setCurrentIndex(0)
+                moveCombo.setCurrentIndex(0)
             table.setCellWidget(row, 5, moveCombo)
 
             # Remove Cell
@@ -221,10 +303,11 @@ class MainWindow(QtGui.QMainWindow):
             table.setCellWidget(row, 6, removeBtn)
             row+=1
 
-    def readKeyboards(self):
+    def refreshKeyboards(self):
         table = self.ui.keyboardTable
+        table.setRowCount(0)
         row = 0
-        for hotkey in self.config['hotkey']:
+        for hotkey in self.keyboards:
             table.insertRow(row)
             table.setItem(row, 0, QtGui.QTableWidgetItem(hotkey['key']))
             table.setItem(row, 1, QtGui.QTableWidgetItem(hotkey['action']))
@@ -244,9 +327,10 @@ class MainWindow(QtGui.QMainWindow):
             table.setCellWidget(row, 1, removeBtn)
             row += 1
 
-    def readModes(self):
+    def refreshModes(self):
         tabs = self.ui.modesTab
-        for modeKey in self.config['mode']:
+        tabs.clear()
+        for modeKey in self.modes:
             tabContent = QtGui.QWidget()
             modeKeyboardTable = QtGui.QTableWidget(tabContent)
             modeKeyboardTable.setGeometry(QtCore.QRect(10, 10, 700, 350))
